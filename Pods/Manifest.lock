@@ -1,0 +1,24 @@
+PODS:
+  - PreviewUIKit (1.0.4)
+  - SnapKit (5.0.1)
+  - Then (2.6.0)
+
+DEPENDENCIES:
+  - PreviewUIKit (~> 1.0.3)
+  - SnapKit (~> 5.0.1)
+  - Then (~> 2.6.0)
+
+SPEC REPOS:
+  trunk:
+    - PreviewUIKit
+    - SnapKit
+    - Then
+
+SPEC CHECKSUMS:
+  PreviewUIKit: f3bf0418a88c0bb747ff8356a17dd5fef313de7a
+  SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
+  Then: 90cd104fd951cec1980a03f57704ad8f784d4d79
+
+PODFILE CHECKSUM: b01d9fa93b191da9943857d2667de55bddf9c988
+
+COCOAPODS: 1.9.3

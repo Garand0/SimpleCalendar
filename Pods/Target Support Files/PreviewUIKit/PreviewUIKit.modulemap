@@ -1,0 +1,6 @@
+framework module PreviewUIKit {
+  umbrella header "PreviewUIKit-umbrella.h"
+
+  export *
+  module * { export * }
+}
