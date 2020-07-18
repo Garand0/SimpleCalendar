@@ -20,6 +20,8 @@ final class CalendarHeaderView: UICollectionReusableView {
         $0.distribution  = .fillEqually
     }
     
+    override var reuseIdentifier: String? { String(describing: CalendarHeaderView.self) }
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         commonInit()

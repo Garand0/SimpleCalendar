@@ -36,7 +36,10 @@ final class CalendarDataSource: UICollectionViewFlowLayout {
                 let line = CGFloat((sectionStart + itemIndex - 1) / 7).rounded(.toNearestOrAwayFromZero)
                 
                 let x = side * CGFloat(position - 1)
-                let y = (side * CGFloat(line) + CGFloat(max(.zero, line - 1)) * 2) + height
+                let lineSpacingOffsets = CGFloat(max(.zero, line - 1) * 2)
+                let headerOffsets = CGFloat(max(.zero, line - 1) * 100)
+                let rowHeight = side * CGFloat(line)
+                let y = rowHeight + lineSpacingOffsets + headerOffsets + height
                 
                 let layout =
                     UICollectionViewLayoutAttributes(forCellWith: IndexPath(item: itemIndex, section: sectionIndex))
@@ -88,6 +91,18 @@ extension CalendarDataSource: UICollectionViewDataSource {
             ($0 as? DateCollectionViewCell)?.configure(title: "\(indexPath.row)")
         }
     }
+    
+    func collectionView(
+        _ collectionView: UICollectionView,
+        viewForSupplementaryElementOfKind kind: String,
+        at indexPath: IndexPath
+    ) -> UICollectionReusableView {
+        collectionView.dequeueReusableSupplementaryView(
+            ofKind: kind,
+            withReuseIdentifier: String(describing: CalendarHeaderView.self),
+            for: indexPath
+        )
+    }
 }
 
 // MARK: - UICollectionViewDelegate
@@ -113,7 +128,7 @@ extension CalendarDataSource: UICollectionViewDelegateFlowLayout {
         layout _: UICollectionViewLayout,
         referenceSizeForHeaderInSection _: Int
     ) -> CGSize {
-        .init(width: collectionView.bounds.width, height: 2)
+        .init(width: collectionView.bounds.width, height: 100)
     }
     
     func collectionView(

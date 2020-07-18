@@ -13,14 +13,13 @@ final class CalendarView: UIView {
     private lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: calendarDataSource).then {
         $0.dataSource = calendarDataSource
         $0.delegate = calendarDataSource
-        $0.backgroundColor = .yellow
         $0.register(
             DateCollectionViewCell.self,
             forCellWithReuseIdentifier: String(describing: DateCollectionViewCell.self)
         )
         $0.register(
             CalendarHeaderView.self,
-            forSupplementaryViewOfKind: "header",
+            forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
             withReuseIdentifier: String(describing: CalendarHeaderView.self)
         )
     }
