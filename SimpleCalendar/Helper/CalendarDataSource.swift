@@ -22,7 +22,8 @@ final class CalendarDataSource: UICollectionViewFlowLayout {
     override func prepare() {
         super.prepare()
         cache = [:]
-        
+        cacheHeader = [:]
+
         let side = itemSize.width
         var height = CGFloat.zero
         
