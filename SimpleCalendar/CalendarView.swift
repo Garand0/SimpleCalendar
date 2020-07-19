@@ -13,6 +13,7 @@ final class CalendarView: UIView {
     private lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: calendarDataSource).then {
         $0.dataSource = calendarDataSource
         $0.delegate = calendarDataSource
+        $0.backgroundColor = .white
         $0.register(
             DateCollectionViewCell.self,
             forCellWithReuseIdentifier: String(describing: DateCollectionViewCell.self)
@@ -47,7 +48,6 @@ final class CalendarView: UIView {
         )
         calendarDataSource.dataSource = dataSet
         collectionView.reloadData()
-        collectionView.collectionViewLayout.invalidateLayout()
     }
     
     private func addSubviews() {

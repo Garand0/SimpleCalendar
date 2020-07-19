@@ -15,6 +15,7 @@ final class CalendarDataSource: UICollectionViewFlowLayout {
     }
     
     var cache: [Int: [Int: UICollectionViewLayoutAttributes]] = [:]
+    var cacheHeader: [Int: UICollectionViewLayoutAttributes] = [:]
     
     // MARK: - UICollectionViewFlowLayout
     
@@ -25,31 +26,37 @@ final class CalendarDataSource: UICollectionViewFlowLayout {
         let side = itemSize.width
         var height = CGFloat.zero
         
-        for sectionIndex in .zero ..< dataSource.count {
-            let section = dataSource[sectionIndex]
-            let sectionStart = section.startWeekDay.rawValue
-
-            var items: [Int: UICollectionViewLayoutAttributes] = [:]
-            for itemIndex in .zero ..< dataSource[sectionIndex].dates.count {
-                // TODO: разобрать это говно
-                let position = ((sectionStart + itemIndex) % 7 == .zero) ? 7 : (sectionStart + itemIndex) % 7
-                let line = CGFloat((sectionStart + itemIndex - 1) / 7).rounded(.toNearestOrAwayFromZero)
+        autoreleasepool {
+            for sectionIndex in .zero ..< dataSource.count {
+                let section = dataSource[sectionIndex]
+                let sectionStart = section.startWeekDay.rawValue
                 
-                let x = side * CGFloat(position - 1)
-                let lineSpacingOffsets = CGFloat(max(.zero, line - 1) * 2)
-                let headerOffsets = CGFloat(max(.zero, line - 1) * 100)
-                let rowHeight = side * CGFloat(line)
-                let y = rowHeight + lineSpacingOffsets + headerOffsets + height
+                let header = UICollectionViewLayoutAttributes()
+                header.frame = CGRect(x: .zero, y: height, width: collectionView?.bounds.width ?? .zero, height: 100)
+                cacheHeader.updateValue(header, forKey: sectionIndex)
                 
-                let layout =
-                    UICollectionViewLayoutAttributes(forCellWith: IndexPath(item: itemIndex, section: sectionIndex))
+                height += 100
                 
-                layout.frame = CGRect(x: x, y: y, width: itemSize.width, height: itemSize.height)
-                items.updateValue(layout, forKey: itemIndex)
-                guard itemIndex == dataSource[sectionIndex].dates.count - 1 else { continue }
-                height = y + side
+                var items: [Int: UICollectionViewLayoutAttributes] = [:]
+                for itemIndex in .zero ..< dataSource[sectionIndex].dates.count {
+                    // TODO: разобрать это говно
+                    let position = ((sectionStart + itemIndex) % 7 == .zero) ? 7 : (sectionStart + itemIndex) % 7
+                    let line = CGFloat((sectionStart + itemIndex - 1) / 7).rounded(.toNearestOrAwayFromZero)
+                    
+                    let x = side * CGFloat(position - 1)
+                    let lineSpacingOffsets = CGFloat(max(.zero, line - 1) * 2)
+                    let rowHeight = side * CGFloat(line)
+                    let y = rowHeight + lineSpacingOffsets + height
+                    
+                    let layout = UICollectionViewLayoutAttributes()
+                    
+                    layout.frame = CGRect(x: x, y: y, width: itemSize.width, height: itemSize.height)
+                    items.updateValue(layout, forKey: itemIndex)
+                    guard itemIndex == dataSource[sectionIndex].dates.count - 1 else { continue }
+                    height = y + side
+                }
+                cache.updateValue(items, forKey: sectionIndex)
             }
-            cache.updateValue(items, forKey: sectionIndex)
         }
     }
     
@@ -61,11 +68,29 @@ final class CalendarDataSource: UICollectionViewFlowLayout {
         return layout
     }
     
+    override func layoutAttributesForSupplementaryView(
+        ofKind elementKind: String,
+        at indexPath: IndexPath
+    ) -> UICollectionViewLayoutAttributes? {
+        let `super` = super.layoutAttributesForSupplementaryView(ofKind: elementKind, at: indexPath)
+        guard elementKind == UICollectionView.elementKindSectionHeader else {  return `super` }
+        `super`?.frame = cacheHeader[indexPath.section]?.frame ?? .zero
+        return `super`
+    }
+    
     override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
-        let attributes = super.layoutAttributesForElements(in: rect)
-        return attributes?.compactMap { attribute in
-            guard attribute.representedElementCategory == .cell else { return attribute }
-            return layoutAttributesForItem(at: attribute.indexPath)
+        super.layoutAttributesForElements(in: rect)?.compactMap { attribute in
+            switch attribute.representedElementCategory {
+            case .cell:
+                return layoutAttributesForItem(at: attribute.indexPath)
+            case .supplementaryView:
+                return layoutAttributesForSupplementaryView(
+                    ofKind: attribute.representedElementKind ?? "",
+                    at: attribute.indexPath
+                )
+            default:
+                return nil
+            }
         }
     }
 }
