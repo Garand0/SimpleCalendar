@@ -162,6 +162,7 @@
 				179FC11024C2E2B50087E7B7 /* Sources */,
 				179FC11124C2E2B50087E7B7 /* Frameworks */,
 				179FC11224C2E2B50087E7B7 /* Resources */,
+				49723C8B904B712F56425C94 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -220,6 +221,23 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		49723C8B904B712F56425C94 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-SimpleCalendar/Pods-SimpleCalendar-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-SimpleCalendar/Pods-SimpleCalendar-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SimpleCalendar/Pods-SimpleCalendar-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		5E9A19D2BACBDD131FC58484 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;

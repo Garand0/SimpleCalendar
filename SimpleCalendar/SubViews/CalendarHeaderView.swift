@@ -36,7 +36,10 @@ final class CalendarHeaderView: UICollectionReusableView {
         makeConstraints()
         
         let weekDayLabels = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"].map { str in
-            UILabel().then { $0.text = str }
+            UILabel().then {
+                $0.text = str
+                $0.textAlignment = .center
+            }
         }
         stackView.add { weekDayLabels }
     }
