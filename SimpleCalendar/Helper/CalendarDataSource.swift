@@ -40,7 +40,6 @@ final class CalendarDataSource: UICollectionViewFlowLayout {
             
             var items: [Int: UICollectionViewLayoutAttributes] = [:]
             for itemIndex in .zero ..< dataSource[sectionIndex].dates.count {
-                // TODO: разобрать это говно
                 let position = ((sectionStart + itemIndex) % 7 == .zero) ? 7 : (sectionStart + itemIndex) % 7
                 let line = CGFloat((sectionStart + itemIndex - 1) / 7).rounded(.toNearestOrAwayFromZero)
                 
