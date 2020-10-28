@@ -22,3 +22,35 @@ struct CalendarModel {
     let startWeekDay: WeekDay
     let dates: [Date]
 }
+
+struct CalendarDateFormatter {
+    static func monthName(for date: Date?) -> String? {
+        guard let date = date else { return nil }
+        let formatter = DateFormatter()
+        formatter.dateFormat = "LLLL YYYY"
+        return formatter.string(from: date).stringWithCapitalizedFirstCharacter()
+    }
+    
+    static func dateDayNumberText(for date: Date?) -> String? {
+        guard let date = date else { return nil }
+        let formatter = DateFormatter()
+        formatter.dateFormat = "d"
+        return formatter.string(from: date).stringWithCapitalizedFirstCharacter()
+    }
+
+    static func dateDayNumber(for date: Date?) -> Int? {
+        guard let date = date else { return nil }
+        return Calendar.current.component(.day, from: date)
+    }
+}
+
+
+extension String {
+    public func stringWithCapitalizedFirstCharacter() -> String {
+        guard !isEmpty else { return self }
+
+        let first = String(prefix(1)).capitalized
+        let other = String(dropFirst())
+        return first + other
+    }
+}

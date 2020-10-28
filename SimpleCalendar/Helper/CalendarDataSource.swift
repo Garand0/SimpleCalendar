@@ -10,12 +10,29 @@ import Then
 import UIKit
 
 final class CalendarDataSource: UICollectionViewFlowLayout {
+    // MARK: - Types
+
+    typealias SectionDataSet = [Int: UICollectionViewLayoutAttributes]
+
+    // MARK: - UICollectionViewLayout
+
+    override var collectionViewContentSize: CGSize {
+        .init(width: collectionView?.bounds.width ?? .zero, height: height)
+    }
+
+    // MARK: - Public Properties
+
     var dataSource: [CalendarModel] = [] {
         didSet { invalidateLayout() }
     }
+
+    // MARK: - Private Properties
+
+    private var period: Period?
+    private var cache: [Int: SectionDataSet] = [:]
+    private var cacheHeader: SectionDataSet = [:]
     
-    var cache: [Int: [Int: UICollectionViewLayoutAttributes]] = [:]
-    var cacheHeader: [Int: UICollectionViewLayoutAttributes] = [:]
+    private var height = CGFloat.zero
     
     // MARK: - UICollectionViewFlowLayout
     
@@ -38,9 +55,8 @@ final class CalendarDataSource: UICollectionViewFlowLayout {
             
             height += 100
             
-            var items: [Int: UICollectionViewLayoutAttributes] = [:]
+            var items: SectionDataSet = [:]
             for itemIndex in .zero ..< dataSource[sectionIndex].dates.count {
-                // TODO: разобрать это говно
                 let position = ((sectionStart + itemIndex) % 7 == .zero) ? 7 : (sectionStart + itemIndex) % 7
                 let line = CGFloat((sectionStart + itemIndex - 1) / 7).rounded(.toNearestOrAwayFromZero)
                 
@@ -59,6 +75,7 @@ final class CalendarDataSource: UICollectionViewFlowLayout {
             }
             cache.updateValue(items, forKey: sectionIndex)
         }
+        self.height = height
     }
     
     override func layoutAttributesForItem(at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
@@ -112,8 +129,13 @@ extension CalendarDataSource: UICollectionViewDataSource {
             withReuseIdentifier: String(describing: DateCollectionViewCell.self),
             for: indexPath
         ).then {
-            $0.backgroundColor = [UIColor.red, UIColor.green, UIColor.blue].randomElement()
-            ($0 as? DateCollectionViewCell)?.configure(title: "\(indexPath.row)")
+            let date = dataSource[indexPath.section].dates[indexPath.row]
+            let dayNumber = CalendarDateFormatter.dateDayNumberText(for: date)
+            ($0 as? DateCollectionViewCell)?.configure(title: dayNumber)
+            if let period = self.period {
+                let state: CellState = period.contains(date: date) ? .single : .notSelected
+                ($0 as? DateCollectionViewCell)?.configure(state: state)
+            }
         }
     }
     
@@ -126,14 +148,38 @@ extension CalendarDataSource: UICollectionViewDataSource {
             ofKind: kind,
             withReuseIdentifier: String(describing: CalendarHeaderView.self),
             for: indexPath
-        )
+        ).then {
+            let month = CalendarDateFormatter.monthName(for: dataSource[indexPath.section].dates.first)
+            ($0 as? CalendarHeaderView)?.configure(with: month)
+        }
     }
 }
 
 // MARK: - UICollectionViewDelegate
 
 extension CalendarDataSource: UICollectionViewDelegate {
-    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        collectionView.deselectItem(at: indexPath, animated: false)
+        let date = dataSource[indexPath.section].dates[indexPath.row]
+        if let period = period {
+            var startDate = date < period.startDate ? date : period.startDate
+            var endDate = date > period.endDate ? date : period.endDate
+            if date.isBetweeen(date: period.startDate, andDate: period.endDate) {
+                let middle = period.startDate.daysBetweenDates(to: period.endDate) / 2
+                let middleDate = period.endDate.dateByAddingDays(-middle)
+                if date.isBetweeen(date: middleDate, andDate: period.endDate) {
+                    endDate = date
+                } else {
+                    startDate = date
+                }
+            }
+            self.period = Period(startDate: startDate, endDate: endDate)
+        } else {
+            period = Period(startDate: date, endDate: date)
+        }
+
+        UIView.performWithoutAnimation(collectionView.reloadData)
+    }
 }
 
 // MARK: - UICollectionViewDelegateFlowLayout

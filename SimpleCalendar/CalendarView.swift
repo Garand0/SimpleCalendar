@@ -56,11 +56,7 @@ final class CalendarView: UIView {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-
-        guard let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout else
-        {
-            return
-        }
+        guard let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout else { return }
         
         let side = collectionView.bounds.width / 7
         let itemSize = CGSize(width: side, height: side)

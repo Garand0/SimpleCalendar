@@ -13,14 +13,14 @@ final class CalendarHeaderView: UICollectionReusableView {
     
     private let separatorView = UIView().then { $0.backgroundColor = .gray }
     
-    private let monthLabel = UILabel().then { $0.text = "Январь" }
+    private let monthLabel = UILabel()
     
     private let stackView = UIStackView().then {
         $0.axis = .horizontal
         $0.distribution  = .fillEqually
     }
     
-    override var reuseIdentifier: String? { String(describing: CalendarHeaderView.self) }
+    override var reuseIdentifier: String? { String(describing: Self.self) }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -68,6 +68,16 @@ final class CalendarHeaderView: UICollectionReusableView {
             make.leading.trailing.equalToSuperview()
             make.height.equalTo(28)
         }
+    }
+}
+
+// MARK: - Configurable
+
+extension CalendarHeaderView {
+    typealias ViewModel = String?
+    
+    func configure(with viewModel: ViewModel) {
+        monthLabel.text = viewModel
     }
 }
 

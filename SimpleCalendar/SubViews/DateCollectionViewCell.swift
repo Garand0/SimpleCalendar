@@ -8,6 +8,14 @@
 
 import UIKit
 
+enum CellState {
+    case notSelected
+    case single
+    case selectionLeftEdge
+    case selectionRightEdge
+    case selectionMiddle
+}
+
 final class DateCollectionViewCell: UICollectionViewCell {
     
     private let titleLable = UILabel().then { $0.textAlignment = .center }
@@ -21,10 +29,18 @@ final class DateCollectionViewCell: UICollectionViewCell {
     
     required init?(coder: NSCoder) { nil }
     
-    func configure(title: String) {
+    func configure(title: String?) {
         titleLable.text = title
     }
-    
+
+    func configure(state: CellState) {
+        if state == .notSelected {
+            backgroundColor = .white
+        } else {
+            backgroundColor = .red
+        }
+    }
+
     // MARK: - Private Methods
     
     private func commonInit() {
@@ -33,9 +49,7 @@ final class DateCollectionViewCell: UICollectionViewCell {
     }
     
     private func addSubviews() {
-        add(insets: .zero) {
-            titleLable
-        }
+        add(insets: .zero) { titleLable }
     }
     
     private func makeConstraints() {}

@@ -11,15 +11,10 @@ import Foundation
 final class CalendarModelFactory {
     static func make(startDate: Date, endDate: Date) -> [CalendarModel] {
         let numberOfMonths = startDate.monthsBetweenDates(to: endDate)
-        
-        var allDates = [CalendarModel]()
-        for index in .zero ..< numberOfMonths {
-            let dates = startDate.dateByAddingMonths(index).getMonth()
-            let model = CalendarModel(startWeekDay: dates.first!.weekDay, dates: dates)
-            allDates.append(model)
+        return (.zero ..< numberOfMonths).map {
+            let dates = startDate.dateByAddingMonths($0).getMonth()
+            return CalendarModel(startWeekDay: dates.first!.weekDay, dates: dates)
         }
-        
-        return allDates
     }
 }
 
@@ -49,10 +44,10 @@ extension Date {
     }
     /// Получаем массив из дат всех дней месяца
     public func getMonth() -> [Date] {
-        let future = dateByAddingMonths(1)
+        let future = startOfMonth.dateByAddingMonths(1)
         var month: [Date] = []
 
-        var date = self
+        var date = startOfMonth
         while date.compare(future) != .orderedSame {
             month.append(date)
             date = date.dateByAddingDays(1)

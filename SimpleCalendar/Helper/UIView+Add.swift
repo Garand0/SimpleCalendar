@@ -7,12 +7,13 @@ import SnapKit
 /// Конструктор функций для добавления дочерних вьюшек в иерархичном виде
 @_functionBuilder
 public struct AddViewBuilder {
-    public static func buildBlock(_ views: UIView...) -> [UIView] {
-        views
-    }
+    public static func buildBlock(_ views: UIView...) -> [UIView] { views }
 
-    public static func buildBlock(_ view: UIView) -> [UIView] {
-        [view]
+    public static func buildBlock(_ views: [UIView]) -> [UIView] { views }
+
+    public static func buildBlock(_ view: UIView?) -> [UIView] {
+        guard let view = view else { return [] }
+        return [view]
     }
 }
 
@@ -30,14 +31,27 @@ extension UIView {
         return self
     }
 
+    /// Добавить массив вьюшек
+    /// - Parameter views: Массив вьюшек
+    @discardableResult
+    public func add(_ views: [UIView]) -> UIView {
+        if let stackView = self as? UIStackView {
+            views.forEach { stackView.addArrangedSubview($0) }
+        } else {
+            views.forEach { addSubview($0) }
+        }
+        return self
+    }
+
     /// Добавить одну вьюшку
     /// - Parameter block: Блок, возвращающий вьюшку
     @discardableResult
-    public func add(@AddViewBuilder _ block: () -> (UIView)) -> UIView {
+    public func add(@AddViewBuilder _ block: () -> (UIView?)) -> UIView {
+        guard let view = block() else { return self }
         if let stackView = self as? UIStackView {
-            stackView.addArrangedSubview(block())
+            stackView.addArrangedSubview(view)
         } else {
-            addSubview(block())
+            addSubview(view)
         }
         return self
     }
@@ -46,7 +60,7 @@ extension UIView {
     /// - Parameter insets: Инсеты дочерней вьюшки
     /// - Parameter block: Блок, возвращающий вьюшку
     @discardableResult
-    public func add(insets: UIEdgeInsets, @AddViewBuilder _ block: () -> (UIView)) -> UIView {
+    public func add(insets: UIEdgeInsets, _ block: () -> (UIView)) -> UIView {
         let view = block()
         add { view }
         view.snp.makeConstraints {
@@ -62,7 +76,7 @@ extension UIView {
     /// - Parameter index: Индекс вставки вьюшки
     /// - Parameter block: Блок, возвращающий вьюшку
     @discardableResult
-    public func insert(at index: Int, @AddViewBuilder _ block: () -> (UIView)) -> UIView {
+    public func insert(at index: Int, _ block: () -> (UIView)) -> UIView {
         if let stackView = self as? UIStackView {
             stackView.insertArrangedSubview(block(), at: index)
         } else {
