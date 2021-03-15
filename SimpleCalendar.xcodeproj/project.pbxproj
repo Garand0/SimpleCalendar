@@ -13,6 +13,7 @@
 		171661CD24C34BAE00948BC6 /* CalendarHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 171661CC24C34BAE00948BC6 /* CalendarHeaderView.xib */; };
 		1755E322254A320F00DD1A6B /* Period.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1755E321254A320F00DD1A6B /* Period.swift */; };
 		1755E325254A37EC00DD1A6B /* UIColor+Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1755E324254A37EC00DD1A6B /* UIColor+Colors.swift */; };
+		1755E328254AAFD400DD1A6B /* UIColor+HEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1755E327254AAFD400DD1A6B /* UIColor+HEX.swift */; };
 		179FC11824C2E2B50087E7B7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 179FC11724C2E2B50087E7B7 /* AppDelegate.swift */; };
 		179FC11A24C2E2B50087E7B7 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 179FC11924C2E2B50087E7B7 /* SceneDelegate.swift */; };
 		179FC11C24C2E2B50087E7B7 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 179FC11B24C2E2B50087E7B7 /* ViewController.swift */; };
@@ -33,6 +34,7 @@
 		171661CC24C34BAE00948BC6 /* CalendarHeaderView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CalendarHeaderView.xib; sourceTree = "<group>"; };
 		1755E321254A320F00DD1A6B /* Period.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Period.swift; sourceTree = "<group>"; };
 		1755E324254A37EC00DD1A6B /* UIColor+Colors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+Colors.swift"; sourceTree = "<group>"; };
+		1755E327254AAFD400DD1A6B /* UIColor+HEX.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+HEX.swift"; sourceTree = "<group>"; };
 		179FC11424C2E2B50087E7B7 /* SimpleSimpleCalendar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SimpleSimpleCalendar.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		179FC11724C2E2B50087E7B7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		179FC11924C2E2B50087E7B7 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -131,6 +133,7 @@
 			isa = PBXGroup;
 			children = (
 				1755E324254A37EC00DD1A6B /* UIColor+Colors.swift */,
+				1755E327254AAFD400DD1A6B /* UIColor+HEX.swift */,
 				179FC12D24C2E62C0087E7B7 /* CalendarModelFactory.swift */,
 				171661C424C2FF0000948BC6 /* UIView+Add.swift */,
 				17C68D5C24C2F430008AFF90 /* CalendarDataSource.swift */,
@@ -276,6 +279,7 @@
 				171661C524C2FF0000948BC6 /* UIView+Add.swift in Sources */,
 				1755E325254A37EC00DD1A6B /* UIColor+Colors.swift in Sources */,
 				1755E322254A320F00DD1A6B /* Period.swift in Sources */,
+				1755E328254AAFD400DD1A6B /* UIColor+HEX.swift in Sources */,
 				17C68D5D24C2F430008AFF90 /* CalendarDataSource.swift in Sources */,
 				179FC11C24C2E2B50087E7B7 /* ViewController.swift in Sources */,
 				171661CB24C31A8A00948BC6 /* CalendarHeaderView.swift in Sources */,

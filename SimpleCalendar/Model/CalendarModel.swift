@@ -9,13 +9,32 @@
 import Foundation
 
 enum WeekDay: Int {
-    case monday = 1
-    case tuesday
-    case wednesday
-    case thursday
-    case friday
-    case saturday
-    case sunday
+    case monday = 2
+    case tuesday = 3
+    case wednesday = 4
+    case thursday = 5
+    case friday = 6
+    case saturday = 7
+    case sunday = 1
+
+    var index: Int {
+        switch self {
+        case .monday:
+            return 1
+        case .tuesday:
+            return 2
+        case .wednesday:
+            return 3
+        case .thursday:
+            return 4
+        case .friday:
+            return 5
+        case .saturday:
+            return 6
+        case .sunday:
+            return 7
+        }
+    }
 }
 
 struct CalendarModel {
@@ -42,6 +61,10 @@ struct CalendarDateFormatter {
         guard let date = date else { return nil }
         return Calendar.current.component(.day, from: date)
     }
+
+    static func isMonday(for date: Date) -> Bool { Calendar.current.component(.weekday, from: date) == 2 }
+
+    static func isSunday(for date: Date) -> Bool { Calendar.current.component(.weekday, from: date) == 1 }
 }
 
 

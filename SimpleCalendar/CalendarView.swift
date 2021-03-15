@@ -63,7 +63,7 @@ final class CalendarView: UIView {
         guard itemSize != layout.itemSize else { return }
 
         layout.itemSize = itemSize
-        layout.prepare() 
+        layout.prepare()
         layout.invalidateLayout()
     }
 }

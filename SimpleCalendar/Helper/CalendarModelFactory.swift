@@ -22,8 +22,7 @@ final class CalendarModelFactory {
 extension Date {
     /// День недели
     var weekDay: WeekDay {
-        let calendar = Calendar.current
-        let weekday = calendar.dateComponents([.weekday], from: self).weekday ?? .zero
+        let weekday = Calendar.current.component(.weekday, from: self)
         return WeekDay(rawValue: weekday)!
     }
     
@@ -92,4 +91,9 @@ extension Date {
         )!
     }
 
+    public func isSameWeek(with date: Date) -> Bool {
+        let selfWeek = Calendar.current.component(.weekOfMonth, from: self)
+        let dateWeek = Calendar.current.component(.weekOfMonth, from: date)
+        return selfWeek == dateWeek
+    }
 }

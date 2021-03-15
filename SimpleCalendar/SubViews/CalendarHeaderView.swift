@@ -13,15 +13,15 @@ final class CalendarHeaderView: UICollectionReusableView {
     
     private let separatorView = UIView().then { $0.backgroundColor = .gray }
     
-    private let monthLabel = UILabel()
+    private let monthLabel = UILabel().then { $0.textColor = .b1 }
     
     private let stackView = UIStackView().then {
         $0.axis = .horizontal
         $0.distribution  = .fillEqually
     }
-    
+
     override var reuseIdentifier: String? { String(describing: Self.self) }
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         commonInit()
@@ -38,6 +38,8 @@ final class CalendarHeaderView: UICollectionReusableView {
         let weekDayLabels = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"].map { str in
             UILabel().then {
                 $0.text = str
+                $0.textColor = .b2
+                $0.font = .systemFont(ofSize: 13)
                 $0.textAlignment = .center
             }
         }
@@ -58,12 +60,12 @@ final class CalendarHeaderView: UICollectionReusableView {
             make.height.equalTo(12)
         }
         monthLabel.snp.makeConstraints { make in
-            make.top.equalTo(separatorView).offset(16)
+            make.top.equalTo(separatorView.snp.bottom).offset(16)
             make.leading.greaterThanOrEqualTo(16)
             make.centerX.equalToSuperview()
         }
         stackView.snp.makeConstraints { make in
-            make.top.equalTo(monthLabel).offset(16)
+            make.top.equalTo(monthLabel.snp.bottom).offset(16)
             make.bottom.equalToSuperview()
             make.leading.trailing.equalToSuperview()
             make.height.equalTo(28)

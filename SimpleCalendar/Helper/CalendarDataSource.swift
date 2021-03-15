@@ -46,7 +46,7 @@ final class CalendarDataSource: UICollectionViewFlowLayout {
         
         for sectionIndex in .zero ..< dataSource.count {
             let section = dataSource[sectionIndex]
-            let sectionStart = section.startWeekDay.rawValue
+            let sectionStart = section.startWeekDay.index
             
             let indexPath = IndexPath(row: 0, section: sectionIndex)
             let header = UICollectionViewLayoutAttributes(forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, with: indexPath)
@@ -61,7 +61,7 @@ final class CalendarDataSource: UICollectionViewFlowLayout {
                 let line = CGFloat((sectionStart + itemIndex - 1) / 7).rounded(.toNearestOrAwayFromZero)
                 
                 let x = side * CGFloat(position - 1)
-                let lineSpacingOffsets = CGFloat(max(.zero, line - 1) * 2)
+                let lineSpacingOffsets = CGFloat(max(.zero, line) * 2)
                 let rowHeight = side * CGFloat(line)
                 let y = rowHeight + lineSpacingOffsets + height
                 
@@ -129,11 +129,33 @@ extension CalendarDataSource: UICollectionViewDataSource {
             withReuseIdentifier: String(describing: DateCollectionViewCell.self),
             for: indexPath
         ).then {
-            let date = dataSource[indexPath.section].dates[indexPath.row]
+            let dates = dataSource[indexPath.section].dates
+            let date = dates[indexPath.row]
             let dayNumber = CalendarDateFormatter.dateDayNumberText(for: date)
             ($0 as? DateCollectionViewCell)?.configure(title: dayNumber)
             if let period = self.period {
-                let state: CellState = period.contains(date: date) ? .single : .notSelected
+                let state: CellState
+                if period.contains(date: date) {
+                    if period.startDate == period.endDate {
+                        state = .singleSelection
+                    } else if date == period.startDate {
+                        state = .selectionStart
+                    } else if date == period.endDate {
+                        state = .selectionEnd
+                    } else {
+                        if dates.contains(where: { $0.isSameWeek(with: date) }) == false {
+                            state = .selectionMiddleOneDay
+                        } else if CalendarDateFormatter.isMonday(for: date) || date == date.startOfMonth {
+                            state = .selectionLeftEdge
+                        } else if CalendarDateFormatter.isSunday(for: date) || date == date.endOfMonth {
+                            state = .selectionRightEdge
+                        } else {
+                            state = .selectionMiddle
+                        }
+                    }
+                } else {
+                    state = .notSelected
+                }
                 ($0 as? DateCollectionViewCell)?.configure(state: state)
             }
         }
